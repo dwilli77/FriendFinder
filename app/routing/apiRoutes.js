@@ -6,9 +6,20 @@ module.exports = function(app) {
         res.json(friends);
     });
 
-    app.post('/api/tables', function(req,res) {
-        friends.push(req.body);
+    app.post('/api/friends', function(req,res) {
         let userScoresArr = req.body.scores;
-        //send back user's match
+        let bestMatch = {};
+        let matchDiff = 999;
+        for (let i = 0; i < friends.length; i++){
+            let diff = 0;
+            for (let j = 0; j < friends[i].scores.length; j++){
+                diff += Math.abs(friends[i].scores[j] - userScoresArr[j]);
+            };
+            if (diff < matchDiff){
+                bestMatch = friends[i];
+            };
+        };
+        friends.push(req.body);
+        res.json(bestMatch);
     })
 }
