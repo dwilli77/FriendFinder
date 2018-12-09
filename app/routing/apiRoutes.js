@@ -13,9 +13,10 @@ module.exports = function(app) {
         for (let i = 0; i < friends.length; i++){
             let diff = 0;
             for (let j = 0; j < friends[i].scores.length; j++){
-                diff += Math.abs(friends[i].scores[j] - userScoresArr[j]);
+                diff += Math.abs(parseInt(friends[i].scores[j]) - parseInt(userScoresArr[j]));
             };
             if (diff < matchDiff){
+                matchDiff = diff;
                 bestMatch = friends[i];
             };
         };

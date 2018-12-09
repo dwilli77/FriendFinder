@@ -31,7 +31,7 @@
     <h4>Name (Required)</h4>
     <input type="text" id="name" class="form-control" required>
 
-    <h4>Link to Photo Image (Required)</h4>
+    <h4>Link to Photo Image</h4>
     <input type="text" id="photo" class="form-control" required>
 
     <hr>
@@ -191,19 +191,42 @@
   <script>
   
     $('#submit').on('click', function(){
+      //checks if the name field is blank
+      if (!$('#name').val()){
+        alert('Enter your name');
+        return false;
+      }
       let userInfo = {
         name: $('#name').val().trim(),
-        photo: ('#photo').val().trim(),
+        photo: $('#photo').val().trim(),
         scores: []
       };
+      // pushes user's answers into the scores array while also checking if any of the answers were left blank.
+      let validScores = true;
       for (let i = 1; i <= 10; i++){
-        userInfo.push($('#q'+i).val())
+        if (!$('#q'+i).val()) {
+          validScores = false;
+        }
+        userInfo.scores.push($('#q'+i).val());
       };
-      $.post("/api/friends", userInfo).then(function(bestMatch){
-        $('#match-name').val(bestMatch.name);
-        $('#match-img').attr('src', bestMatch.photo);
-        $('#modal1').modal('open');
-      })
+      console.log(userInfo.scores)
+      // if none of the answers were blank - continue with post req
+      if (validScores){
+        $.post("/api/friends", userInfo).then(function(bestMatch){
+          $('#match-name').text(bestMatch.name);
+          $('#match-img').attr('src', bestMatch.photo);
+          console.log(bestMatch);
+          $('#results-modal').modal('toggle');
+          // clears out the answer fields
+          for (let i = 1; i <= 10; i++){
+            $('#q'+i).val("");
+          };
+          $('#name').val("");
+          $('#photo').val("");
+        })
+      } else {
+        alert("Answer all the questions!");
+      };
     })
   
   </script>
