@@ -10,3 +10,5 @@ FriendFinder uses the following technologies:
   * AJAX/Routing
  
 Complete the survey and see your closest match. 
+
+![screenshot](./screenshot.PNG "Friend Finder")
